@@ -15,11 +15,13 @@ const VALID_LANGUAGES = ["pt", "en", "es"];
 // Palavras-chave de clear
 const CLEAR_KEYWORDS = ["clear", "limpar", "limpiar"];
 
+const CACHE_OPTS = { cache: 'no-cache' };
+
 async function loadData() {
     try {
         const [contactRes, stacksRes] = await Promise.all([
-            fetch('assets/data/contact.json'),
-            fetch('assets/data/stacks.json'),
+            fetch('assets/data/contact.json', CACHE_OPTS),
+            fetch('assets/data/stacks.json', CACHE_OPTS),
         ]);
         currentContact = await contactRes.json();
         currentStacks = await stacksRes.json();
@@ -31,9 +33,9 @@ async function loadData() {
 async function loadLanguageData(lang) {
     try {
         const [langRes, projectsRes, certsRes] = await Promise.all([
-            fetch(`assets/lang/${lang}.json`),
-            fetch(`assets/data/projects/projects-${lang}.json`),
-            fetch(`assets/data/certifications/certifications-${lang}.json`),
+            fetch(`assets/lang/${lang}.json`, CACHE_OPTS),
+            fetch(`assets/data/projects/projects-${lang}.json`, CACHE_OPTS),
+            fetch(`assets/data/certifications/certifications-${lang}.json`, CACHE_OPTS),
         ]);
         currentTranslations = await langRes.json();
         currentProjects = await projectsRes.json();
