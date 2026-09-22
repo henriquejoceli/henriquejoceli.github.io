@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Java 21",
+        "icon": "devicon-java-plain colored"
+    },
+    {
+        "name": "PL/SQL",
+        "icon": "devicon-oracle-original colored"
+    },
+    {
+        "name": "C",
+        "icon": "devicon-c-plain colored"
+    }
+]

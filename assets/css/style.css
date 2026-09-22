@@ -1,0 +1,281 @@
+/* =============================================
+   IMPORT FONT
+   ============================================= */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+/* =============================================
+   THEMES — definidos via data-theme no <html>
+   ============================================= */
+
+/* Gruvbox (padrão) */
+[data-theme="gruvbox"] {
+    --color-bg:        #282828;
+    --color-bg-soft:   #3c3836;
+    --color-border:    #504945;
+    --color-fg:        #ebdbb2;
+    --color-fg-muted:  #a89984;
+    --color-primary:   #b8bb26;
+    --color-secondary: #fabd2f;
+    --color-accent:    #83a598;
+    --color-error:     #fb4934;
+    --color-cursor:    #b8bb26;
+}
+
+/* Dracula */
+[data-theme="dracula"] {
+    --color-bg:        #282a36;
+    --color-bg-soft:   #343746;
+    --color-border:    #44475a;
+    --color-fg:        #f8f8f2;
+    --color-fg-muted:  #6272a4;
+    --color-primary:   #50fa7b;
+    --color-secondary: #bd93f9;
+    --color-accent:    #8be9fd;
+    --color-error:     #ff5555;
+    --color-cursor:    #f1fa8c;
+}
+
+/* Solarized Dark */
+[data-theme="solarized"] {
+    --color-bg:        #002b36;
+    --color-bg-soft:   #073642;
+    --color-border:    #586e75;
+    --color-fg:        #839496;
+    --color-fg-muted:  #657b83;
+    --color-primary:   #859900;
+    --color-secondary: #2aa198;
+    --color-accent:    #268bd2;
+    --color-error:     #dc322f;
+    --color-cursor:    #b58900;
+}
+
+/* =============================================
+   RESET & BASE
+   ============================================= */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* =============================================
+   TERMINAL CONTAINER
+   ============================================= */
+.main {
+    width: 100%;
+    max-width: 860px;
+    background-color: var(--color-bg-soft);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ─── barra de título estilo terminal ─── */
+.main::before {
+    content: '';
+    display: block;
+    background-color: var(--color-border);
+    height: 32px;
+    background-image:
+        radial-gradient(circle, #ff5f57 6px, transparent 6px),
+        radial-gradient(circle, #febc2e 6px, transparent 6px),
+        radial-gradient(circle, #28c840 6px, transparent 6px);
+    background-size: 14px 14px, 14px 14px, 14px 14px;
+    background-position: 14px center, 34px center, 54px center;
+    background-repeat: no-repeat;
+    transition: background-color 0.3s ease;
+}
+
+/* =============================================
+   TERMINAL HISTORY
+   ============================================= */
+.container-terminal-history {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 72vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+}
+
+.container-terminal-history::-webkit-scrollbar {
+    width: 6px;
+}
+
+.container-terminal-history::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 3px;
+}
+
+/* ─── blocos de entrada/saída ─── */
+.output-command {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.output-response {
+    color: var(--color-fg);
+    white-space: pre-wrap;
+    padding-left: 1rem;
+    border-left: 2px solid var(--color-border);
+}
+
+/* ─── links dentro do terminal ─── */
+.terminal-link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.terminal-link:hover {
+    color: var(--color-secondary);
+}
+
+/* ─── lista de stacks com ícones ─── */
+.stacks-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0;
+}
+
+.stacks-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--color-fg);
+}
+
+.stacks-list li i {
+    font-size: 1.3rem;
+    width: 1.5rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* ─── seção inicial ─── */
+.container-start p {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+/* ─── introdução ─── */
+.container-intro p {
+    color: var(--color-fg);
+    max-width: 72ch;
+}
+
+/* ─── lista de comandos ─── */
+.container-list p {
+    color: var(--color-fg-muted);
+    margin-bottom: 0.4rem;
+}
+
+.commands-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+    padding-left: 1rem;
+}
+
+.commands-menu {
+    color: var(--color-secondary);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.commands-menu::before {
+    content: '> ';
+    color: var(--color-fg-muted);
+}
+
+.commands-menu:hover {
+    color: var(--color-accent);
+}
+
+/* =============================================
+   INPUT FORM
+   ============================================= */
+.container-form-input {
+    border-top: 1px solid var(--color-border);
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-bg);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.container-form-input form {
+    display: flex;
+    align-items: center;
+}
+
+.container-form-input fieldset {
+    border: none;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.container-form-input label {
+    color: var(--color-primary);
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.container-form-input input[type="text"] {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-fg);
+    font-family: inherit;
+    font-size: inherit;
+    caret-color: var(--color-cursor);
+    width: 100%;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 600px) {
+    body {
+        padding: 0;
+        align-items: flex-start;
+    }
+
+    .main {
+        border-radius: 0;
+        min-height: 100vh;
+    }
+
+    .container-terminal-history {
+        max-height: none;
+    }
+}
