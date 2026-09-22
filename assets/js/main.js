@@ -1,6 +1,3 @@
-/* =============================================
-   ESTADO GLOBAL
-   ============================================= */
 let currentLanguage = "pt";
 let currentTheme = "gruvbox";
 let currentTranslations = {};
@@ -15,12 +12,9 @@ let commandHistoryIndex = -1;
 const VALID_THEMES = ["dracula", "gruvbox", "solarized"];
 const VALID_LANGUAGES = ["pt", "en", "es"];
 
-// Palavras-chave de clear em todos os idiomas (não dependem do JSON carregado)
+// Palavras-chave de clear
 const CLEAR_KEYWORDS = ["clear", "limpar", "limpiar"];
 
-/* =============================================
-   CARREGAMENTO INICIAL DE DADOS
-   ============================================= */
 async function loadData() {
     try {
         const [contactRes, stacksRes] = await Promise.all([
@@ -49,9 +43,6 @@ async function loadLanguageData(lang) {
     }
 }
 
-/* =============================================
-   APLICAR TRADUÇÕES (data-translate)
-   ============================================= */
 function applyTranslations() {
     document.querySelectorAll('[data-translate]').forEach(function (el) {
         const key = el.getAttribute('data-translate');
@@ -61,29 +52,18 @@ function applyTranslations() {
     });
 }
 
-/* =============================================
-   APLICAR TEMA
-   ============================================= */
 function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     currentTheme = theme;
     localStorage.setItem('portfolio-theme', theme);
 }
 
-/* =============================================
-   LIMPAR TERMINAL
-   ============================================= */
 function clearTerminal() {
     const container = document.querySelector('.container-terminal-history');
-    // Remove todos os filhos dinâmicos (output-command e output-response)
-    // mantendo os blocos estáticos do HTML (start, intro, list)
     container.querySelectorAll('.output-command, .output-response').forEach(el => el.remove());
     container.scrollTop = 0;
 }
 
-/* =============================================
-   RENDERIZAÇÃO NO TERMINAL — texto simples
-   ============================================= */
 function renderCommandResult(command, responseText) {
     const container = document.querySelector('.container-terminal-history');
 
@@ -101,9 +81,6 @@ function renderCommandResult(command, responseText) {
     container.scrollTop = container.scrollHeight;
 }
 
-/* =============================================
-   RENDERIZAÇÃO NO TERMINAL — HTML rico
-   ============================================= */
 function renderNodeResult(command, node) {
     const container = document.querySelector('.container-terminal-history');
 
@@ -121,20 +98,15 @@ function renderNodeResult(command, node) {
     container.scrollTop = container.scrollHeight;
 }
 
-/* =============================================
-   RESOLUÇÃO DE COMANDOS
-   ============================================= */
 function resolveCommand(input) {
     const normalized = input.trim().toLowerCase().replace(/\s+/g, ' ');
 
-    // Verifica match exato com algum valor do JSON de tradução
     for (const key of Object.keys(currentTranslations)) {
         if (currentTranslations[key].toLowerCase() === normalized) {
             return { key, args: [] };
         }
     }
 
-    // Verifica comandos com argumento: "alterar tema dracula"
     const parts = normalized.split(' ');
     if (parts.length >= 3) {
         const base = parts.slice(0, -1).join(' ');
@@ -150,9 +122,6 @@ function resolveCommand(input) {
     return null;
 }
 
-/* =============================================
-   HANDLER DE COMANDOS
-   ============================================= */
 function handleCommand(normalizedInput) {
     const result = resolveCommand(normalizedInput);
 
@@ -164,13 +133,11 @@ function handleCommand(normalizedInput) {
     const { key, args } = result;
 
     switch (key) {
-        /* ── sobre mim ── */
         case "aboutMe": {
             renderCommandResult(normalizedInput, currentTranslations["aboutMeText"]);
             break;
         }
 
-        /* ── contato ── */
         case "contact": {
             const t = currentTranslations;
             const c = currentContact;
@@ -194,7 +161,7 @@ function handleCommand(normalizedInput) {
                 frag.appendChild(line);
             }
 
-            addLine(t["contactNameLabel"],     c.fullName);
+            addLine(t["contactNameLabel"], c.fullName);
 
             // E-mail: montado em runtime para não expor o endereço em texto puro
             if (c.emailUser && c.emailDomain) {
@@ -210,16 +177,15 @@ function handleCommand(normalizedInput) {
                 frag.appendChild(emailLine);
             }
 
-            addLine(t["contactCompanyLabel"],  c.currentCompany);
+            addLine(t["contactCompanyLabel"], c.currentCompany);
             addLine(t["contactPositionLabel"], c.position);
             addLine(t["contactLinkedinLabel"], c.linkedin, true);
-            addLine(t["contactGithubLabel"],   c.github,   true);
+            addLine(t["contactGithubLabel"], c.github, true);
 
             renderNodeResult(normalizedInput, frag);
             break;
         }
 
-        /* ── projetos ── */
         case "projects": {
             const t = currentTranslations;
             let projectsText = "";
@@ -236,7 +202,6 @@ function handleCommand(normalizedInput) {
             break;
         }
 
-        /* ── certificações ── */
         case "certifications": {
             const t = currentTranslations;
             let certsText = "";
@@ -252,7 +217,6 @@ function handleCommand(normalizedInput) {
             break;
         }
 
-        /* ── stacks / tecnologias ── */
         case "stacks": {
             if (!currentStacks.length) {
                 renderCommandResult(normalizedInput, currentTranslations["stacksEmpty"]);
@@ -274,7 +238,6 @@ function handleCommand(normalizedInput) {
             break;
         }
 
-        /* ── alterar tema ── */
         case "themeChange": {
             if (args.length === 0) {
                 // sem argumento: mostra opções
@@ -291,7 +254,6 @@ function handleCommand(normalizedInput) {
             break;
         }
 
-        /* ── alterar idioma ── */
         case "languageChange": {
             if (args.length === 0) {
                 renderCommandResult(normalizedInput, currentTranslations["languageChangeText"]);
@@ -312,7 +274,6 @@ function handleCommand(normalizedInput) {
             break;
         }
 
-        /* ── ajuda ── */
         case "help": {
             const t = currentTranslations;
             const commandList = [
@@ -336,9 +297,6 @@ function handleCommand(normalizedInput) {
     }
 }
 
-/* =============================================
-   EVENTO DE SUBMIT DO FORMULÁRIO
-   ============================================= */
 document.querySelector('#visitor-input').addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -363,9 +321,6 @@ document.querySelector('#visitor-input').addEventListener('submit', function (ev
     inputEl.value = '';
 });
 
-/* =============================================
-   HISTÓRICO COM SETA PARA CIMA/BAIXO
-   ============================================= */
 document.querySelector('#command-input').addEventListener('keydown', function (event) {
     if (event.key === 'ArrowUp') {
         event.preventDefault();
@@ -386,9 +341,6 @@ document.querySelector('#command-input').addEventListener('keydown', function (e
     }
 });
 
-/* =============================================
-   CLIQUE NOS ITENS DA LISTA (atalho)
-   ============================================= */
 document.querySelectorAll('.commands-menu').forEach(function (item) {
     item.addEventListener('click', function () {
         const text = this.textContent;
@@ -401,7 +353,6 @@ document.querySelectorAll('.commands-menu').forEach(function (item) {
    INICIALIZAÇÃO
    ============================================= */
 async function init() {
-    // Restaura preferências salvas
     const savedTheme = localStorage.getItem('portfolio-theme') || 'gruvbox';
     const savedLang = localStorage.getItem('portfolio-lang') || 'pt';
 

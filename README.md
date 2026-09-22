@@ -22,6 +22,7 @@
 ```
 meu-portfolio/
 ├── index.html
+├── README.md
 └── assets/
     ├── css/
     │   └── style.css
@@ -34,7 +35,6 @@ meu-portfolio/
     └── data/
         ├── contact.json
         ├── stacks.json
-        ├── colors.json
         ├── projects/
         │   ├── projects-pt.json
         │   ├── projects-en.json
